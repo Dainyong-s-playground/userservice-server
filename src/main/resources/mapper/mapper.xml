@@ -6,6 +6,10 @@
 <!--<mapper namespace="v0.project.mysite.KBC.repository.IUserRepository">-->
 <mapper namespace="kkk.dainyong.usr.login.repository.IUserRepository">
 
+    <insert id="insert" parameterType="kkk.dainyong.usr.login.DTO.Users">
+        INSERT INTO KUsers (id, nickname, gender, birth)
+        VALUES (#{id}, #{nickname}, #{gender}, #{birth})
+    </insert>
 <!--    <resultMap id="BizMembersResultMap" type="v0.project.mysite.work.HJH.model.BizMembers">-->
 <!--        <id property="bizmember_id" column="bizmember_id"/>-->
 <!--        <result property="username" column="username"/>-->
@@ -22,15 +26,16 @@
 <!--        <result property="date_joined" column="date_joined"/>-->
 <!--    </resultMap>-->
 
-<!--    <resultMap id="TestBiz" type="v0.project.mysite.KBC.DTO.TestBiz">-->
-<!--        <id property="id" column="id"/>-->
-<!--        <result property="username" column="username"/>-->
-<!--        <result property="password" column="password"/>-->
-<!--    </resultMap>-->
+    <resultMap id="UsersResultMap" type="kkk.dainyong.usr.login.DTO.Users">
+        <id property="id" column="id"/>
+        <result property="nickname" column="nickname"/>
+        <result property="gender" column="gender"/>
+        <result property="birth" column="birth"/>
+    </resultMap>
 
-<!--    <select id="getBizMember" resultMap="BizMembersResultMap">-->
-<!--        SELECT * FROM BizMembers WHERE username = #{query}-->
-<!--    </select>-->
+    <select id="findByEmail" resultMap="UsersResultMap">
+        SELECT * FROM KUsers WHERE id = #{query}
+    </select>
 
 <!--    <select id="selectAll" resultMap="BizMembersResultMap">-->
 <!--        SELECT * FROM BizMembers-->

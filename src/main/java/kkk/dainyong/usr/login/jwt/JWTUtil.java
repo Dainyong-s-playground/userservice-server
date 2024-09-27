@@ -1,6 +1,8 @@
 package kkk.dainyong.usr.login.jwt;
 
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -26,8 +28,8 @@ public class JWTUtil {
     }
 
     public String getId(String token) {
-
-        return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().get("id", String.class);
+        String userId = Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().get("id", String.class);
+        return userId;
     }
     public String getGender(String token) {
 
@@ -58,6 +60,24 @@ public class JWTUtil {
                 .claim("profileName", null)
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis() + expiredMs))
+                .signWith(secretKey)
+                .compact();
+    }
+
+    public Long getProfileId(String token) {
+        return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().get("profileId", Long.class);
+    }
+
+    public String refactorToken(String userId, Long profileId, String role) {
+        Date now = new Date();
+        Date validity = new Date(now.getTime() + 1800000);  // 1시간 유효
+
+        return Jwts.builder()
+                .claim("id", userId)
+                .claim("profileId", profileId)
+                .claim("role", role)
+                .setIssuedAt(now)
+                .setExpiration(validity)
                 .signWith(secretKey)
                 .compact();
     }

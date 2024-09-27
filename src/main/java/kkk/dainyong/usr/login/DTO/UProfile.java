@@ -5,10 +5,10 @@ import lombok.Setter;
 
 @Setter
 @Getter
-public class Users {
-    String id;
+public class UProfile {
+    Long id;
     String nickname;
-    String gender;
+    char gender;
     String birth;
-    Long profileId;
+    String image;
 }

@@ -37,6 +37,23 @@
         SELECT * FROM KUsers WHERE id = #{query}
     </select>
 
+    <resultMap id="UProfileResultMap" type="kkk.dainyong.usr.login.DTO.UProfile">
+        <id property="id" column="id"/>
+        <result property="nickname" column="nickname"/>
+        <result property="gender" column="gender"/>
+        <result property="birth" column="birth"/>
+        <result property="image" column="image"/>
+    </resultMap>
+
+
+    <select id="findByEmailForProfile" resultMap="UProfileResultMap">
+        SELECT * FROM Profiles WHERE user_id = #{email}
+    </select>
+
+
+    <select id="findByProfileId" resultMap="UProfileResultMap">
+        SELECT * FROM Profiles WHERE id = #{profileId}
+    </select>
 <!--    <select id="selectAll" resultMap="BizMembersResultMap">-->
 <!--        SELECT * FROM BizMembers-->
 <!--    </select>-->

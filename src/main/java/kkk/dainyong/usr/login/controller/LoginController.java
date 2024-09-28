@@ -4,12 +4,14 @@ package kkk.dainyong.usr.login.controller;
 import kkk.dainyong.usr.login.DTO.JWTResponse;
 import kkk.dainyong.usr.login.DTO.ProfileSelectionRequest;
 import kkk.dainyong.usr.login.DTO.UProfile;
+import kkk.dainyong.usr.login.DTO.Users;
 import kkk.dainyong.usr.login.jwt.JWTRefactor;
 import kkk.dainyong.usr.login.service.CustomOAuth2User;
 import kkk.dainyong.usr.login.service.ProfileService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.context.annotation.Profile;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -62,5 +64,26 @@ public class LoginController {
 
         // 새 JWT 토큰을 응답으로 반환
         return ResponseEntity.ok(new JWTResponse(newToken));
+    }
+
+
+
+    @GetMapping("api/me")
+    public ResponseEntity<Users> loginProfile() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Object principal = authentication.getPrincipal();
+
+        if (principal instanceof OAuth2User) {
+            OAuth2User oAuth2User = (OAuth2User) principal;
+            CustomOAuth2User userTokenInfo = (CustomOAuth2User) oAuth2User;
+            Users loginUser = profileService.loginUser(userTokenInfo.getId());
+            log.info(loginUser);
+            return ResponseEntity.ok(loginUser);
+        }else{
+            return null;
+        }
+
+        // JWT 토큰에서 사용자 정보 추출
+
     }
 }

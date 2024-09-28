@@ -1,6 +1,7 @@
 package kkk.dainyong.usr.login.service;
 
 import kkk.dainyong.usr.login.DTO.UProfile;
+import kkk.dainyong.usr.login.DTO.Users;
 import kkk.dainyong.usr.login.repository.IUserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Profile;
@@ -29,5 +30,13 @@ public class ProfileService {
             return null;
         }
         return profile;
+    }
+
+    public Users loginUser(String id){
+        Users loginUser = userRepository.findByEmail(id);
+        if(loginUser==null){
+            return null;
+        }
+        return loginUser;
     }
 }

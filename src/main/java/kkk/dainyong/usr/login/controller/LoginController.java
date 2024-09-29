@@ -1,10 +1,10 @@
 package kkk.dainyong.usr.login.controller;
 
 
-import kkk.dainyong.usr.login.DTO.JWTResponse;
-import kkk.dainyong.usr.login.DTO.ProfileSelectionRequest;
-import kkk.dainyong.usr.login.DTO.UProfile;
-import kkk.dainyong.usr.login.DTO.Users;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
+import kkk.dainyong.usr.login.DTO.*;
 import kkk.dainyong.usr.login.jwt.JWTRefactor;
 import kkk.dainyong.usr.login.service.CustomOAuth2User;
 import kkk.dainyong.usr.login.service.ProfileService;
@@ -69,21 +69,44 @@ public class LoginController {
 
 
     @GetMapping("api/me")
-    public ResponseEntity<Users> loginProfile() {
+    public ResponseEntity<UProfile> loginProfile() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Object principal = authentication.getPrincipal();
 
         if (principal instanceof OAuth2User) {
             OAuth2User oAuth2User = (OAuth2User) principal;
             CustomOAuth2User userTokenInfo = (CustomOAuth2User) oAuth2User;
-            Users loginUser = profileService.loginUser(userTokenInfo.getId());
+            UProfile loginUser = profileService.selectProfile(userTokenInfo.getProfileId());
             log.info(loginUser);
             return ResponseEntity.ok(loginUser);
         }else{
             return null;
         }
 
-        // JWT 토큰에서 사용자 정보 추출
 
     }
+
+    @PostMapping("/api/createProfile")
+    public ResponseEntity<?> createProfile(@RequestBody @Valid CreateProfile profileRequest) {
+
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            Object principal = authentication.getPrincipal();
+
+            if (principal instanceof OAuth2User) {
+                OAuth2User oAuth2User = (OAuth2User) principal;
+                CustomOAuth2User userTokenInfo = (CustomOAuth2User) oAuth2User;
+                // JWT 토큰 검증 및 유저 ID 추출
+                String userId = userTokenInfo.getId();
+
+                // 서비스에 전달하여 프로필 생성 처리
+                profileService.createProfile(userId, profileRequest);
+
+                // 성공적으로 생성된 경우 200 OK 응답
+                return ResponseEntity.ok("프로필이 성공적으로 생성되었습니다.");
+            }else {
+                // 실패한 경우 500 Internal Server Error 응답
+                return ResponseEntity.status(500).body("프로필 생성 중 오류가 발생했습니다.");
+            }
+    }
+
 }

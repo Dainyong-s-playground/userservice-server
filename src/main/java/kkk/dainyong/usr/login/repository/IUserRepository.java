@@ -16,4 +16,5 @@ public interface IUserRepository {
     void delete(String email);
     List<UProfile> findByEmailForProfile(String email);
     UProfile findByProfileId(Long profileId);
+    void insertProfiles(UProfile entity);
 }

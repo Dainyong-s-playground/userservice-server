@@ -40,7 +40,7 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         GrantedAuthority auth = iterator.next();
         String role = auth.getAuthority();
 
-        String token = jwtUtil.createJwt(id, username, gender, birth, role, 600*40*60L); //24분
+        String token = jwtUtil.createJwt(id, username, gender, birth, role, 1800000L); //24분
 
         response.addCookie(createCookie("Authorization", token));
         response.sendRedirect("http://localhost:8080/profiles");
@@ -49,7 +49,7 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
     private Cookie createCookie(String key, String value) {
 
         Cookie cookie = new Cookie(key, value);
-        cookie.setMaxAge(60*60*60);
+        cookie.setMaxAge(1800);
 
         //cookie.setSecure(true);
         cookie.setPath("/"); //전체 경로에 유효

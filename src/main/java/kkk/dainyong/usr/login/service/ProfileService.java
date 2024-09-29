@@ -1,5 +1,6 @@
 package kkk.dainyong.usr.login.service;
 
+import kkk.dainyong.usr.login.DTO.CreateProfile;
 import kkk.dainyong.usr.login.DTO.UProfile;
 import kkk.dainyong.usr.login.DTO.Users;
 import kkk.dainyong.usr.login.repository.IUserRepository;
@@ -38,5 +39,17 @@ public class ProfileService {
             return null;
         }
         return loginUser;
+    }
+
+    public void createProfile(String userId, CreateProfile newProfile){
+        UProfile profile = new UProfile();
+        profile.setNickname(newProfile.getNickname());
+        profile.setGender(newProfile.getGender());
+        profile.setBirth(newProfile.getBirth());
+        profile.setImage(newProfile.getImage());
+        profile.setUser_id(userId);
+
+
+        userRepository.insertProfiles(profile);
     }
 }

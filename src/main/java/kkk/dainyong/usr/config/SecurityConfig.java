@@ -1,6 +1,5 @@
 package kkk.dainyong.usr.config;
 
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import kkk.dainyong.usr.login.jwt.JWTFilter;
 import kkk.dainyong.usr.login.jwt.JWTUtil;
@@ -10,18 +9,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.oauth2.client.web.OAuth2LoginAuthenticationFilter;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
-
-import java.util.Collections;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
@@ -90,8 +82,13 @@ public class SecurityConfig {
                 .logout(logout ->
                         logout
                                 .logoutUrl("/auth/logout") // 로그아웃 URL 설정
-                                .logoutSuccessUrl("/login")
+//                                .logoutSuccessUrl("/login")
+                                .logoutSuccessHandler((request, response, authentication) -> {
+                                    response.setStatus(HttpServletResponse.SC_OK); // HTTP 200 OK 설정
+                                    response.getWriter().flush(); // 응답 바디 비우기
+                                })
                                 .deleteCookies("Authorization","JSESSIONID")
+
                 )
                 .sessionManagement((session) -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS));

@@ -11,4 +11,5 @@ public class UProfile {
     char gender;
     String birth;
     String image;
+    String user_id;
 }

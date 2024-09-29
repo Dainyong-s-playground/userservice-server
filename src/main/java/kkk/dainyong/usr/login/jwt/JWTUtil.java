@@ -50,7 +50,7 @@ public class JWTUtil {
     }
 
     public String createJwt(String id, String nickname, String gender, String birth, String role, Long expiredMs) {
-
+        Date now = new Date();
         return Jwts.builder()
                 .claim("id", id)
                 .claim("nickname", nickname)
@@ -59,7 +59,8 @@ public class JWTUtil {
                 .claim("role", role)
                 .claim("profileName", null)
                 .issuedAt(new Date(System.currentTimeMillis()))
-                .expiration(new Date(System.currentTimeMillis() + expiredMs))
+//                .expiration(new Date(now.getTime() + expiredMs))
+                .setExpiration(new Date(now.getTime()+expiredMs))
                 .signWith(secretKey)
                 .compact();
     }

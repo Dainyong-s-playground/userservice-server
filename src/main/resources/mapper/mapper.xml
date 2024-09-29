@@ -54,6 +54,11 @@
     <select id="findByProfileId" resultMap="UProfileResultMap">
         SELECT * FROM Profiles WHERE id = #{profileId}
     </select>
+
+    <insert id="insertProfiles" parameterType="kkk.dainyong.usr.login.DTO.UProfile">
+        INSERT INTO PROFILES (id, nickname, gender, birth, image, user_id)
+        VALUES (profiles_seq.NEXTVAL, #{nickname}, #{gender}, #{birth}, #{image}, #{user_id})
+    </insert>
 <!--    <select id="selectAll" resultMap="BizMembersResultMap">-->
 <!--        SELECT * FROM BizMembers-->
 <!--    </select>-->

@@ -14,5 +14,4 @@ public class Users {
     String nickname;
     String gender;
     String birth;
-//    Long profileId;
 }

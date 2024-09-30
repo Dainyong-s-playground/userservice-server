@@ -5,23 +5,22 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import kkk.dainyong.usr.login.DTO.Users;
+import kkk.dainyong.usr.login.DTO.UserToken;
 import kkk.dainyong.usr.login.service.CustomOAuth2User;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
+@RequiredArgsConstructor
+@Component
 public class JWTFilter extends OncePerRequestFilter {
 
     private final JWTUtil jwtUtil;
-
-    public JWTFilter(JWTUtil jwtUtil) {
-
-        this.jwtUtil = jwtUtil;
-    }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
@@ -76,17 +75,9 @@ public class JWTFilter extends OncePerRequestFilter {
         String role = jwtUtil.getRole(token);
         Long profileId = jwtUtil.getProfileId(token);
 
-        //userDTO를 생성하여 값 set
-        Users userDTO = new Users();
-        userDTO.setId(username);
-        userDTO.setGender(gender);
-        userDTO.setBirth(birth);
-        userDTO.setId(id);
-        userDTO.setProfileId(profileId);
-
+        UserToken userToken = UserToken.builder().id(id).profileId(profileId).build();
         //UserDetails에 회원 정보 객체 담기
-        CustomOAuth2User customOAuth2User = new CustomOAuth2User(userDTO, role);
-
+        CustomOAuth2User customOAuth2User = new CustomOAuth2User(userToken, role);
         //스프링 시큐리티 인증 토큰 생성
         Authentication authToken = new UsernamePasswordAuthenticationToken(customOAuth2User, null, customOAuth2User.getAuthorities());
         //세션에 사용자 등록

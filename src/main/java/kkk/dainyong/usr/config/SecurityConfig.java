@@ -25,39 +25,25 @@ public class SecurityConfig {
     private final CustomOAuth2UserService customOAuth2UserService;
     private final JWTUtil jwtUtil;
     private final CustomSuccessHandler customSuccessHandler;
+    private final JWTFilter jwtFilter;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
 
-        http
-                .csrf(csrf -> csrf.disable())
-                .cors(withDefaults())
-                .addFilterAfter(new JWTFilter(jwtUtil), OAuth2LoginAuthenticationFilter.class)
-                .oauth2Login(oauth2Login -> oauth2Login
+        http.csrf(csrf -> csrf.disable()).cors(withDefaults()).addFilterAfter(jwtFilter, OAuth2LoginAuthenticationFilter.class).oauth2Login(oauth2Login -> oauth2Login
 
-                                .userInfoEndpoint(userInfoEndpoint ->
-                                        userInfoEndpoint.userService(customOAuth2UserService))
-                                .successHandler(customSuccessHandler)
-                )
+                        .userInfoEndpoint(userInfoEndpoint -> userInfoEndpoint.userService(customOAuth2UserService)).successHandler(customSuccessHandler))
 
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/").permitAll()
-                        .anyRequest().authenticated()
-                )
+                .authorizeHttpRequests(auth -> auth.requestMatchers("/").permitAll().anyRequest().authenticated())
 
-                .logout(logout ->
-                        logout
-                                .logoutUrl("/auth/logout") // 로그아웃 URL 설정
-                                .logoutSuccessHandler((request, response, authentication) -> {
-                                    response.setStatus(HttpServletResponse.SC_OK); // HTTP 200 OK 설정
-                                    response.getWriter().flush(); // 응답 바디 비우기
-                                })
-                                .deleteCookies("Authorization","JSESSIONID")
+                .logout(logout -> logout.logoutUrl("/auth/logout") // 로그아웃 URL 설정
+                        .logoutSuccessHandler((request, response, authentication) -> {
+                            response.setStatus(HttpServletResponse.SC_OK); // HTTP 200 OK 설정
+                            response.getWriter().flush(); // 응답 바디 비우기
+                        }).deleteCookies("Authorization", "JSESSIONID")
 
-                )
-                .sessionManagement((session) -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+                ).sessionManagement((session) -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
 
         return http.build();

@@ -1,13 +1,9 @@
 package kkk.dainyong.usr.login.DTO;
 
 import jakarta.validation.constraints.NotNull;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
-import java.time.LocalDate;
-
-@Getter
-@Setter
+@Data
 public class CreateProfile {
     @NotNull
     private String nickname;

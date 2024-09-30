@@ -36,12 +36,12 @@ public class NaverResponse implements OAuth2Response {
     }
 
     @Override
-    public String getGender(){
+    public String getGender() {
         return attribute.get("gender").toString();
     }
 
     @Override
-    public String getBirthday(){
+    public String getBirthday() {
         return attribute.get("birthday").toString();
     }
 }

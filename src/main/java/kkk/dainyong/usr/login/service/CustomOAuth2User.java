@@ -1,7 +1,6 @@
 package kkk.dainyong.usr.login.service;
 
-import kkk.dainyong.usr.login.DTO.OAuth2Response;
-import kkk.dainyong.usr.login.DTO.Users;
+import kkk.dainyong.usr.login.DTO.UserToken;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.security.core.GrantedAuthority;
@@ -15,7 +14,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class CustomOAuth2User implements OAuth2User {
 
-    private final Users users;
+    private final UserToken users;
     private final String role;
 
 
@@ -39,23 +38,14 @@ public class CustomOAuth2User implements OAuth2User {
 
     @Override
     public String getName() {
-        return users.getNickname();
+        return "name";
     }
 
-
-    public String getGender(){
-        return users.getGender();
-    }
-
-    public String getBirthday(){
-        return users.getBirth();
-    }
-
-    public String getId(){
+    public String getId() {
         return users.getId();
     }
 
-    public Long getProfileId(){
+    public Long getProfileId() {
         return users.getProfileId();
     }
 }

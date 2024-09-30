@@ -4,14 +4,15 @@ package kkk.dainyong.usr.login.controller;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
-import kkk.dainyong.usr.login.DTO.*;
+import kkk.dainyong.usr.login.DTO.CreateProfile;
+import kkk.dainyong.usr.login.DTO.JWTResponse;
+import kkk.dainyong.usr.login.DTO.ProfileSelectionRequest;
+import kkk.dainyong.usr.login.DTO.UProfile;
 import kkk.dainyong.usr.login.jwt.JWTRefactor;
 import kkk.dainyong.usr.login.service.CustomOAuth2User;
 import kkk.dainyong.usr.login.service.ProfileService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.context.annotation.Profile;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -23,24 +24,10 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 @Log4j2
-
 public class LoginController {
     private final ProfileService profileService;
     private final JWTRefactor jwtRefactor;
 
-    @GetMapping("/my")
-    public String getUserInfo() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Object principal = authentication.getPrincipal();
-
-        if (principal instanceof OAuth2User) {
-            OAuth2User oAuth2User = (OAuth2User) principal;
-            CustomOAuth2User loginUser = (CustomOAuth2User) oAuth2User;
-            return "Logged in as: " + loginUser.getId() + loginUser.getProfileId();
-        } else {
-            return "NO login";
-        }
-    }
 
     @CrossOrigin(origins = "http://localhost:8080", allowCredentials = "true")
     @GetMapping("/api/checkProfiles/{userId}")
@@ -49,6 +36,7 @@ public class LoginController {
         List<UProfile> Profiles = profileService.hasProfiles(userId);
         return ResponseEntity.ok(Profiles);
     }
+
     @CrossOrigin(origins = "http://localhost:8080", allowCredentials = "true")
     @PostMapping("api/selectProfile")
     public ResponseEntity<?> selectProfile(@RequestBody ProfileSelectionRequest request, @RequestHeader("Authorization") String token, HttpServletResponse response) {
@@ -75,7 +63,6 @@ public class LoginController {
     }
 
 
-
     @GetMapping("api/me")
     public ResponseEntity<UProfile> loginProfile() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -87,34 +74,32 @@ public class LoginController {
             UProfile loginUser = profileService.selectProfile(userTokenInfo.getProfileId());
             log.info(loginUser);
             return ResponseEntity.ok(loginUser);
-        }else{
+        } else {
             return null;
         }
-
-
     }
 
     @PostMapping("/api/createProfile")
     public ResponseEntity<?> createProfile(@RequestBody @Valid CreateProfile profileRequest) {
 
-            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-            Object principal = authentication.getPrincipal();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Object principal = authentication.getPrincipal();
 
-            if (principal instanceof OAuth2User) {
-                OAuth2User oAuth2User = (OAuth2User) principal;
-                CustomOAuth2User userTokenInfo = (CustomOAuth2User) oAuth2User;
-                // JWT 토큰 검증 및 유저 ID 추출
-                String userId = userTokenInfo.getId();
+        if (principal instanceof OAuth2User) {
+            OAuth2User oAuth2User = (OAuth2User) principal;
+            CustomOAuth2User userTokenInfo = (CustomOAuth2User) oAuth2User;
+            // JWT 토큰 검증 및 유저 ID 추출
+            String userId = userTokenInfo.getId();
 
-                // 서비스에 전달하여 프로필 생성 처리
-                profileService.createProfile(userId, profileRequest);
+            // 서비스에 전달하여 프로필 생성 처리
+            profileService.createProfile(userId, profileRequest);
 
-                // 성공적으로 생성된 경우 200 OK 응답
-                return ResponseEntity.ok("프로필이 성공적으로 생성되었습니다.");
-            }else {
-                // 실패한 경우 500 Internal Server Error 응답
-                return ResponseEntity.status(500).body("프로필 생성 중 오류가 발생했습니다.");
-            }
+            // 성공적으로 생성된 경우 200 OK 응답
+            return ResponseEntity.ok("프로필이 성공적으로 생성되었습니다.");
+        } else {
+            // 실패한 경우 500 Internal Server Error 응답
+            return ResponseEntity.status(500).body("프로필 생성 중 오류가 발생했습니다.");
+        }
     }
 
 }

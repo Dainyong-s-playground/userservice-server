@@ -3,7 +3,6 @@ package kkk.dainyong.usr.login.repository;
 import kkk.dainyong.usr.login.DTO.UProfile;
 import kkk.dainyong.usr.login.DTO.Users;
 import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 

@@ -49,18 +49,26 @@ public class LoginController {
         List<UProfile> Profiles = profileService.hasProfiles(userId);
         return ResponseEntity.ok(Profiles);
     }
-
     @CrossOrigin(origins = "http://localhost:8080", allowCredentials = "true")
     @PostMapping("api/selectProfile")
-    public ResponseEntity<?> selectProfile(@RequestBody ProfileSelectionRequest request, @RequestHeader("Authorization") String token) {
+    public ResponseEntity<?> selectProfile(@RequestBody ProfileSelectionRequest request, @RequestHeader("Authorization") String token, HttpServletResponse response) {
         // JWT 토큰에서 사용자 정보 추출
         String userId = jwtRefactor.getUserIdFromToken(token);
         log.info(userId);
+
         // 선택된 프로필 검증 및 처리
         UProfile selectedProfile = profileService.selectProfile(request.getProfileId());
 
         // 새로운 JWT 토큰 생성 (프로필 정보 포함)
         String newToken = jwtRefactor.createToken(userId, selectedProfile.getId(), "ROLE_USER");
+
+        // 쿠키 업데이트
+        Cookie jwtCookie = new Cookie("Authorization", newToken);
+
+
+        jwtCookie.setPath("/"); // 쿠키가 모든 경로에 대해 유효하도록 설정
+        jwtCookie.setMaxAge(1800); // 쿠키의 유효 기간을 1시간으로 설정
+        response.addCookie(jwtCookie); // 응답에 쿠키 추가
 
         // 새 JWT 토큰을 응답으로 반환
         return ResponseEntity.ok(new JWTResponse(newToken));

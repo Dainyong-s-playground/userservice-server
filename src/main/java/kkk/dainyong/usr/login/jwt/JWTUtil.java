@@ -49,17 +49,12 @@ public class JWTUtil {
         return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().getExpiration().before(new Date());
     }
 
-    public String createJwt(String id, String nickname, String gender, String birth, String role, Long expiredMs) {
+    public String createJwt(String id, String role, Long expiredMs) {
         Date now = new Date();
         return Jwts.builder()
                 .claim("id", id)
-                .claim("nickname", nickname)
-                .claim("gender", gender)
-                .claim("birth", birth)
                 .claim("role", role)
-                .claim("profileName", null)
                 .issuedAt(new Date(System.currentTimeMillis()))
-//                .expiration(new Date(now.getTime() + expiredMs))
                 .setExpiration(new Date(now.getTime()+expiredMs))
                 .signWith(secretKey)
                 .compact();

@@ -2,29 +2,13 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<!--<mapper namespace="[@mapper 파일경로]"> -->
-<!--<mapper namespace="v0.project.mysite.KBC.repository.IUserRepository">-->
 <mapper namespace="kkk.dainyong.usr.login.repository.IUserRepository">
 
     <insert id="insert" parameterType="kkk.dainyong.usr.login.DTO.Users">
         INSERT INTO KUsers (id, nickname, gender, birth)
         VALUES (#{id}, #{nickname}, #{gender}, #{birth})
     </insert>
-<!--    <resultMap id="BizMembersResultMap" type="v0.project.mysite.work.HJH.model.BizMembers">-->
-<!--        <id property="bizmember_id" column="bizmember_id"/>-->
-<!--        <result property="username" column="username"/>-->
-<!--        <result property="password" column="password"/>-->
-<!--        <result property="email" column="email"/>-->
-<!--        <result property="bizrno" column="bizrno"/>-->
-<!--        <result property="address" column="address"/>-->
-<!--        <result property="bizname" column="bizname"/>-->
-<!--        <result property="call_number" column="call_number"/>-->
-<!--        <result property="rating" column="rating"/>-->
-<!--        <result property="base_latitude" column="base_latitude"/>-->
-<!--        <result property="base_longitude" column="base_longitude"/>-->
-<!--        <result property="image_id" column="image_id"/>-->
-<!--        <result property="date_joined" column="date_joined"/>-->
-<!--    </resultMap>-->
+
 
     <resultMap id="UsersResultMap" type="kkk.dainyong.usr.login.DTO.Users">
         <id property="id" column="id"/>
@@ -59,14 +43,5 @@
         INSERT INTO PROFILES (id, nickname, gender, birth, image, user_id)
         VALUES (profiles_seq.NEXTVAL, #{nickname}, #{gender}, #{birth}, #{image}, #{user_id})
     </insert>
-<!--    <select id="selectAll" resultMap="BizMembersResultMap">-->
-<!--        SELECT * FROM BizMembers-->
-<!--    </select>-->
-
-<!--    &lt;!&ndash;    <insert id="insertUser" parameterType="v0.project.mysite.KBC.DTO.TestBiz">&ndash;&gt;-->
-<!--    &lt;!&ndash;        INSERT INTO TestBiz (id, username, password)&ndash;&gt;-->
-<!--    &lt;!&ndash;        VALUES (#{id}, #{username}, #{password})&ndash;&gt;-->
-<!--    &lt;!&ndash;    </insert>&ndash;&gt;-->
-
 
 </mapper>

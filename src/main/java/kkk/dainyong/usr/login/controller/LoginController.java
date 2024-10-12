@@ -29,7 +29,7 @@ public class LoginController {
     private final JWTRefactor jwtRefactor;
 
 
-    @CrossOrigin(origins = "http://localhost:8080", allowCredentials = "true")
+    @CrossOrigin(origins = "http://www.dainyongplayground.site", allowCredentials = "true")
     @GetMapping("/api/checkProfiles/{userId}")
     public ResponseEntity<List<UProfile>> checkProfiles(@PathVariable String userId) {
         log.info(userId);
@@ -37,8 +37,8 @@ public class LoginController {
         return ResponseEntity.ok(Profiles);
     }
 
-    @CrossOrigin(origins = "http://localhost:8080", allowCredentials = "true")
-    @PostMapping("api/selectProfile")
+    @CrossOrigin(origins = "http://www.dainyongplayground.site", allowCredentials = "true")
+    @PostMapping("/api/selectProfile")
     public ResponseEntity<?> selectProfile(@RequestBody ProfileSelectionRequest request, @RequestHeader("Authorization") String token, HttpServletResponse response) {
         // JWT 토큰에서 사용자 정보 추출
         String userId = jwtRefactor.getUserIdFromToken(token);
@@ -55,7 +55,8 @@ public class LoginController {
 
 
         jwtCookie.setPath("/"); // 쿠키가 모든 경로에 대해 유효하도록 설정
-        jwtCookie.setMaxAge(1800); // 쿠키의 유효 기간을 1시간으로 설정
+        jwtCookie.setMaxAge(1800);
+        jwtCookie.setDomain("dainyongplayground.site");// 쿠키의 유효 기간을 1시간으로 설정
         response.addCookie(jwtCookie); // 응답에 쿠키 추가
 
         // 새 JWT 토큰을 응답으로 반환
@@ -63,7 +64,7 @@ public class LoginController {
     }
 
 
-    @GetMapping("api/me")
+    @GetMapping("/api/me")
     public ResponseEntity<UProfile> loginProfile() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Object principal = authentication.getPrincipal();

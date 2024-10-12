@@ -6,6 +6,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import kkk.dainyong.usr.login.jwt.JWTUtil;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
@@ -15,6 +16,7 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.Iterator;
 
+@Log4j2
 @RequiredArgsConstructor
 @Component
 public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
@@ -37,15 +39,16 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         String token = jwtUtil.createJwt(id, role, 1800000L); //24분
 
         response.addCookie(createCookie("Authorization", token));
-        response.sendRedirect("http://localhost:8080/profiles");
+        response.sendRedirect("http://www.dainyongplayground.site/profiles");
     }
 
     private Cookie createCookie(String key, String value) {
 
         Cookie cookie = new Cookie(key, value);
         cookie.setMaxAge(1800);
-        cookie.setPath("/"); //전체 경로에 유효
-
+        cookie.setPath("/");
+        cookie.setDomain("dainyongplayground.site");
+        log.info(cookie);
         return cookie;
     }
 }

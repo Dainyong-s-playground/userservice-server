@@ -116,4 +116,11 @@ public class LoginController {
             return ResponseEntity.status(500).body(e.toString());
         }
     }
+
+    @DeleteMapping("/api/deleteProfile/{profileId}")
+    public ResponseEntity<String> deleteProfile(@PathVariable("profileId") Long profileId) {
+        log.info(profileId);
+        profileService.deleteProfile(profileId);
+        return ResponseEntity.ok("프로필이 성공적으로 삭제되었습니다.");
+    }
 }

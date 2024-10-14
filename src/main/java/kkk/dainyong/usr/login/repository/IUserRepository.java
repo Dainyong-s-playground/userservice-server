@@ -11,7 +11,7 @@ import java.util.List;
 public interface IUserRepository {
     Users findByEmail(String email);
     void insert(Users entity);
-    void update(Users entity);
+    void updateProfile(UProfile entity);
     void delete(String email);
     List<UProfile> findByEmailForProfile(String email);
     UProfile findByProfileId(Long profileId);

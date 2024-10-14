@@ -51,4 +51,16 @@ public class ProfileService {
 
         userRepository.insertProfiles(profile);
     }
+
+    public void updateProfile(Long profileId, CreateProfile newProfile) {
+        UProfile profile = UProfile.builder()
+                .id(profileId)
+                .nickname(newProfile.getNickname())
+                .gender(newProfile.getGender())
+                .birth(newProfile.getBirth())
+                .image(newProfile.getImage())
+                .build();
+
+        userRepository.updateProfile(profile);
+    }
 }

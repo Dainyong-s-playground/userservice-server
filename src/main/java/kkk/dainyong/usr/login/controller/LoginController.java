@@ -102,4 +102,18 @@ public class LoginController {
         }
     }
 
+    @PostMapping("/api/editProfile/{profileId}")
+    public ResponseEntity<?> UpdateProfile(@RequestBody @Valid CreateProfile profileRequest, @PathVariable("profileId") Long profileId) {
+
+        try{
+            // 서비스에 전달하여 프로필 생성 처리
+            profileService.updateProfile(profileId, profileRequest);
+
+            // 성공적으로 생성된 경우 200 OK 응답
+            return ResponseEntity.ok("프로필이 성공적으로 수정되었습니다.");
+        } catch(Exception e) {
+            // 실패한 경우 500 Internal Server Error 응답
+            return ResponseEntity.status(500).body(e.toString());
+        }
+    }
 }

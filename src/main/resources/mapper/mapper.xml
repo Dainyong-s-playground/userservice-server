@@ -44,4 +44,12 @@
         VALUES (profiles_seq.NEXTVAL, #{nickname}, #{gender}, #{birth}, #{image}, #{user_id})
     </insert>
 
+    <update id="updateProfile" parameterType="kkk.dainyong.usr.login.DTO.UProfile">
+        UPDATE PROFILES SET nickname=#{nickname}, gender=#{gender}, birth=#{birth}, image=#{image}
+        WHERE ID=#{id}
+    </update>
+
+    <delete id="deleteProfile">
+        DELETE FROM PROFILES WHERE ID = #{profileId}
+    </delete>
 </mapper>

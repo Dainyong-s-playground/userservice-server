@@ -17,4 +17,5 @@ public interface IUserRepository {
     List<UProfile> findByEmailForProfile(String email);
     UProfile findByProfileId(Long profileId);
     Long insertProfiles(UProfile entity);
+    void insertReports(@Param("profileId") Long profileId);
 }

@@ -55,4 +55,9 @@
     <delete id="deleteProfile">
         DELETE FROM PROFILES WHERE ID = #{profileId}
     </delete>
+
+    <insert id="insertReports">
+        INSERT INTO REPORTS (id, count, record_count, motion_count, game_count, profile_id)
+        VALUES (reports_seq.NEXTVAL, 0, 0, 0, 0, #{profileId})
+    </insert>
 </mapper>

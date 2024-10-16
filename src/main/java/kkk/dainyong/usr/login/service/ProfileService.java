@@ -56,6 +56,8 @@ public class ProfileService {
                 .build();
 
         userRepository.insertProfiles(profile);
+        Long savedId = profile.getId();
+        userRepository.insertReports(savedId);
     }
 
     public void updateProfile(Long profileId, CreateProfile newProfile) {

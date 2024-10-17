@@ -55,7 +55,7 @@ public class LoginController {
 
 
         jwtCookie.setPath("/"); // 쿠키가 모든 경로에 대해 유효하도록 설정
-        jwtCookie.setMaxAge(1800);
+        jwtCookie.setMaxAge(7 * 24 * 60 * 60); // 1주일
         jwtCookie.setSecure(true);
         jwtCookie.setDomain("dainyongplayground.site");// 쿠키의 유효 기간을 1시간으로 설정
         response.addCookie(jwtCookie); // 응답에 쿠키 추가

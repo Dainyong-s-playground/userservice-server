@@ -65,7 +65,7 @@ public class JWTUtil {
 
     public String refactorToken(String userId, Long profileId, String role) {
         Date now = new Date();
-        Date validity = new Date(now.getTime() + 1800000);  // 1시간 유효
+        Date validity = new Date(now.getTime() + 604800000);  // 1주일 유효
 
         return Jwts.builder()
                 .claim("id", userId)

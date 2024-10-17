@@ -34,8 +34,7 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         GrantedAuthority auth = iterator.next();
         String role = auth.getAuthority();
 
-        String token = jwtUtil.createJwt(id, role, 1800000L); //24분
-
+        String token = jwtUtil.createJwt(id, role, 604800000L); // 1주일
         response.addCookie(createCookie("Authorization", token));
         response.sendRedirect("https://www.dainyongplayground.site/profiles");
     }
@@ -43,7 +42,7 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
     private Cookie createCookie(String key, String value) {
 
         Cookie cookie = new Cookie(key, value);
-        cookie.setMaxAge(1800);
+        cookie.setMaxAge(7 * 24 * 60 * 60); // 1주일
         cookie.setSecure(true);
         cookie.setDomain("dainyongplayground.site");
         cookie.setPath("/"); //전체 경로에 유효
